@@ -1,0 +1,904 @@
+# 文件管理
+
+## 1.Linux 系统目录结构
+
+
+&ensp;&ensp;&ensp;&ensp;/bin：bin是Binary的缩写, 这个目录存放着最经常使用的命令。
+
+&ensp;&ensp;&ensp;&ensp;/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+
+&ensp;&ensp;&ensp;&ensp;/dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
+
+&ensp;&ensp;&ensp;&ensp;/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。
+
+&ensp;&ensp;&ensp;&ensp;/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
+
+&ensp;&ensp;&ensp;&ensp;/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。
+
+&ensp;&ensp;&ensp;&ensp;/lost+found：这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
+
+&ensp;&ensp;&ensp;&ensp;/media：linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
+
+&ensp;&ensp;&ensp;&ensp;/mnt：系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。
+
+&ensp;&ensp;&ensp;&ensp;/opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
+
+&ensp;&ensp;&ensp;&ensp;/proc：这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。
+
+这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：
+echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+&ensp;&ensp;&ensp;&ensp;/root；该目录为系统管理员，也称作超级权限者的用户主目录。
+
+&ensp;&ensp;&ensp;&ensp;/sbin：s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。
+
+&ensp;&ensp;&ensp;&ensp;/selinux：这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。
+
+&ensp;&ensp;&ensp;&ensp;/srv：该目录存放一些服务启动之后需要提取的数据。
+
+&ensp;&ensp;&ensp;&ensp;/sys：这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。
+
+sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。
+该文件系统是内核设备树的一个直观反映。
+
+当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建。
+
+&ensp;&ensp;&ensp;&ensp;/tmp：这个目录是用来存放一些临时文件的。
+
+&ensp;&ensp;&ensp;&ensp;/usr：这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。
+
+&ensp;&ensp;&ensp;&ensp;/usr/bin：系统用户使用的应用程序。
+
+&ensp;&ensp;&ensp;&ensp;/usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。
+
+&ensp;&ensp;&ensp;&ensp;/usr/src：内核源代码默认的放置目录。
+
+&ensp;&ensp;&ensp;&ensp;/var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
+
+## 2.文件系统
+
+文件和目录被组织成一个单根倒置树结构
+
+根文件系统(rootfs)：root filesystem
+
+文件名称区分大小写
+
+以.开头的文件为隐藏文件
+
+路径分隔的 /
+
+文件有两类数据：   元数据：metadata     数据：data
+
+## 3.Linux下的文件类型
+
+-	普通文件
+
+d	目录文件
+
+b	块设备
+
+c	字符设备
+
+l 符号链接文件 
+
+p 管道文件pipe
+
+s	套接字文件socket
+
+## 3.绝对和相对路径
+
+&ensp;&ensp;&ensp;&ensp;绝对路径以正斜杠开始完整的文件的位置路径
+可用于任何想指定一个文件名的时候
+
+[root@CentOS7 ~]#`ll /etc/sysconfig/network-scripts/ifcfg-ens33`
+
+>-rw-r--r--. 1rootroot296Sep2010:11/etc/sysconfig/network-scripts/ifcfg-ens33
+
+&ensp;&ensp;&ensp;&ensp;相对路径名不以斜线开始指定相对于当前工作目录或某目录的位置可以作为一个简短的形式指定一个文件名
+
+[root@CentOS7 ~]#`cd /etc/sysconfig/network-scripts`
+
+[root@CentOS7 network-scripts]#`ll ifcfg-ens33`
+
+>-rw-r--r--. 1 root root 296 Sep 20 10:11 ifcfg-ens33
+
+[root@CentOS7 network-scripts]#`ls -a`
+
+>.            ifdown-isdn      ifup-bnep   ifup-routes
+
+..           ifdown-post      ifup-eth    ifup-sit
+
+ifcfg-ens33  ifdown-ppp       ifup-ib     ifup-Team
+
+.代表当前路径
+
+..代表上一级路径
+
+&ensp;&ensp;&ensp;&ensp;pwd：显示当前工作目录
+
+-P 显示真实物理路径
+
+-L 显示链接路径（默认）
+
+## 4.建立一个“-a”文件
+
+[root@CentOS7 ~]#`cd /data`
+
+[root@CentOS7 data]#`touch -- -a`
+
+[root@CentOS7 data]#`ls`
+
+>-a
+
+其他方法：(touch /data/-a    ;     touch ./-b)
+
+删除：
+
+[root@CentOS7 data]#`rm -f -- -a`
+
+[root@CentOS7 data]#`ls`
+
+[root@CentOS7 data]#
+
+##### 基名：basename：-a
+
+##### 目录名：dirname：data
+
+[root@CentOS7 data]#`ll /data/-a`
+
+>-rw-r--r--. 1 root root 0 Sep 25 19:14 /data/-a
+
+
+[root@CentOS7 data]#`dirname /data/-a `
+
+>/data
+
+[root@CentOS7 data]#`basename /data/-a`
+
+>-a
+
+## 5.列出目录内容
+
+列出当前目录的内容或指定目录
+
+用法：ls [options] [files_or_dirs]
+
+示例:
+
+ls -a 包含隐藏文件 
+
+ls -l 显示额外的信息
+
+ls -R 目录递归通过 
+
+ls -ld 目录和符号链接信息 
+
+ls -1  文件分行显示 
+
+ls –S  按从大到小排序(数字比字母次序高)
+
+ls –t   按mtime排序
+
+ls –u   配合-t选项，显示并按atime从新到旧排序 
+
+ls –U  按目录存放顺序显示 
+
+ls –X  按文件后缀排序
+
+## 6.文件通配符
+
+*匹配零个或多个字符
+
+[root@CentOS7 data]#`ls *.conf`
+
+>fa.conf  fe.conf  fi.conf  fm.conf  fq.conf  fu.conf  fy.conf
+fb.conf  ff.conf  fj.conf  fn.conf  fr.conf  fv.conf  fz.conf
+fc.conf  fg.conf  fk.conf  fo.conf  fs.conf  fw.conf
+fd.conf  fh.conf  fl.conf  fp.conf  ft.conf  fx.conf
+
+[root@CentOS7 data]#`ls f*.txt`
+
+>fa.txt  fd.txt  fg.txt  fj.txt  fm.txt  fp.txt  fs.txt  fv.txt  fy.txt
+fb.txt  fe.txt  fh.txt  fk.txt  fn.txt  fq.txt  ft.txt  fw.txt  fz.txt
+fc.txt  ff.txt  fi.txt  fl.txt  fo.txt  fr.txt  fu.txt  fx.txt
+
+[root@CentOS7 data]#`ls *h*`
+
+>fh.conf  fh.txt
+
+？匹配任何单个字符
+
+~ 当前用户家目录
+
+[root@CentOS7 data]#`ls ~`
+>anaconda-ks.cfg  Downloads             Music     root
+
+Desktop          env.sh                Pictures  Templates
+
+Documents        initial-setup-ks.cfg  Public    Videos
+
+~mage 用户mage家目录
+
+[root@CentOS7 data]#`ls ~lpc`
+>[root@CentOS7 data]#cd /home/lpc
+
+[root@CentOS7 lpc]#`ls`
+>[root@CentOS7 lpc]#touch wangfile
+
+[root@CentOS7 lpc]#`ls`
+>wangfile
+
+~+ 当前工作目录
+
+~- 前一个工作目录
+
+[root@CentOS7 data]#`cd -`
+>/root
+
+[root@CentOS7 ~]#`cd -`
+>/data
+
+[0-9] 匹配数字范围
+
+[a-z]：字母
+
+[A-Z]：字母
+
+[wang] 匹配列表中的任何的一个字符
+
+[^wang] 匹配列表中的所有字符以外的字符
+
+文件通配符
+
+预定义的字符类：man 7 glob
+
+[:digit:]：任意数字，相当于0-9
+
+[:lower:]：任意小写字母
+
+[:upper:]: 任意大写字母
+
+[:alpha:]: 任意大小写字母
+
+[root@CentOS7 data]#`touch f{a..z}.txt`
+
+[root@CentOS7 data]#`touch f{A..Z}.txt`
+
+[root@CentOS7 data]#`ls`
+
+>fa.txt  fd.txt  fg.txt  fj.txt  fm.txt  fp.txt  fs.txt  fv.txt  fy.txt
+fA.txt  fD.txt  fG.txt  fJ.txt  fM.txt  fP.txt  fS.txt  fV.txt  fY.txt
+fb.txt  fe.txt  fh.txt  fk.txt  fn.txt  fq.txt  ft.txt  fw.txt  fz.txt
+fB.txt  fE.txt  fH.txt  fK.txt  fN.txt  fQ.txt  fT.txt  fW.txt  fZ.txt
+fc.txt  ff.txt  fi.txt  fl.txt  fo.txt  fr.txt  fu.txt  fx.txt
+fC.txt  fF.txt  fI.txt  fL.txt  fO.txt  fR.txt  fU.txt  fX.txt
+
+[root@CentOS7 data]#`ls f[[:lower:]].txt`
+
+>fa.txt  fd.txt  fg.txt  fj.txt  fm.txt  fp.txt  fs.txt  fv.txt  fy.txt
+fb.txt  fe.txt  fh.txt  fk.txt  fn.txt  fq.txt  ft.txt  fw.txt  fz.txt
+fc.txt  ff.txt  fi.txt  fl.txt  fo.txt  fr.txt  fu.txt  fx.txt
+
+[:alnum:]：任意数字或字母
+
+[:blank:]：水平空白字符
+
+[:space:]：水平或垂直空白字符
+
+[:punct:]：标点符号
+
+[:print:]：可打印字符
+
+[:cntrl:]：控制（非打印）字符
+
+[:graph:]：图形字符
+
+[:xdigit:]：十六进制字符
+
+例：显示当前目录下的带.文件：
+
+[root@CentOS7 ~]#`ls .[^.]*`
+
+>.bash_history  .bash_profile  .cshrc     .ICEauthority
+
+.bash_logout   .bashrc        .esd_auth  .tcshrc
+
+.cache:
+
+abrt
+dconf
+event-sound-cache.tdb.ad9b3d721e97443097da441dbe02c525.x86_64-redhat-linux-gnu
+evolution
+gnome-shell
+gnome-software
+gstreamer-1.0
+imsettings
+libgweather
+media-art
+obexd
+tracker
+vmware
+yelp
+
+.config:
+
+abrt       gnome-initial-setup-done  ibus        user-dirs.dirs
+dconf      gnome-session             imsettings  user-dirs.locale
+evolution  goa-1.0                   nautilus    yelp
+gconf      gtk-3.0                   pulse
+
+.dbus:
+session-bus
+
+.local:
+share
+
+[root@CentOS7 ~]#`ls .[^.]* -d`（或ls -d .*）(只显示当前目录的名称，不会进入目录里)
+
+>.bash_history  .bash_profile  .cache   .cshrc  .esd_auth      .local
+
+.bash_logout   .bashrc        .config  .dbus   .ICEauthority  .tcshrc
+
+#### 练习
+
+1、显示/var目录下所有以l开头，以一个小写字母结尾，且中间出现至少一位数字的文件或目录
+
+[root@CentOS7 ~]#`ls -d /var/l*[[0-9]*[:lower:]]    `
+
+>ls: cannot access /var/l*[[0-9]*[:lower:]]: No such file or directory(没建立文件)
+
+2、显示/etc目录下以任意一位数字开头，且以非数字结尾的文件或目录
+
+[root@CentOS7 ~]#`mkdir /etc/0a`
+
+[root@CentOS7 ~]#`touch /etc/0a/f1`
+
+[root@CentOS7 ~]#`ls /etc/[0-9]*[^0-9] -d`
+
+>/etc/0a
+
+3、显示/etc/目录下以非字母开头，后面跟了一个字母及其它任意长度任意字符的文件或目录
+
+[root@CentOS7 ~]#`ls -d /etc/[^[:alpha:]][[:alpha:]]*`
+
+>/etc/0a
+
+4、显示/etc/目录下所有以rc开头，并后面是0-6之间的数字，其它为任意字符的文件或目录
+
+[root@CentOS7 ~]#`ls -d /etc/rc[0-6]*`
+
+>/etc/rc0.d  /etc/rc2.d  /etc/rc4.d  /etc/rc6.d
+/etc/rc1.d  /etc/rc3.d  /etc/rc5.d
+
+5、显示/etc目录下，所有以.d结尾的文件或目录
+
+[root@CentOS7 ~]#`ls -d /etc/*.d`
+
+>/etc/bash_completion.d  /etc/logrotate.d     /etc/rc6.d
+/etc/binfmt.d           /etc/modprobe.d      /etc/rc.d
+/etc/chkconfig.d        /etc/modules-load.d  /etc/request-key.d
+/etc/cron.d             /etc/my.cnf.d        /etc/rsyslog.d
+/etc/depmod.d           /etc/oddjobd.conf.d  /etc/rwtab.d
+/etc/dnsmasq.d          /etc/pam.d           /etc/sane.d
+/etc/dracut.conf.d      /etc/popt.d          /etc/setuptool.d
+/etc/exports.d          /etc/prelink.conf.d  /etc/statetab.d
+/etc/gdbinit.d          /etc/profile.d       /etc/sudoers.d
+/etc/grub.d             /etc/rc0.d           /etc/sysctl.d
+/etc/init.d             /etc/rc1.d           /etc/tmpfiles.d
+/etc/ipsec.d            /etc/rc2.d           /etc/xinetd.d
+/etc/krb5.conf.d        /etc/rc3.d           /etc/yum.repos.d
+/etc/ld.so.conf.d       /etc/rc4.d
+/etc/libibverbs.d       /etc/rc5.d
+
+6、显示/etc目录下，所有.conf结尾，且以m,n,r,p开头的文件或目录
+
+[root@CentOS7 ~]#`ls -d /etc/[mnrp]*.conf`
+
+>/etc/man_db.conf    /etc/nsswitch.conf  /etc/request-key.conf
+/etc/mke2fs.conf    /etc/numad.conf     /etc/resolv.conf
+/etc/mtools.conf    /etc/pbm2ppa.conf   /etc/rsyncd.conf
+/etc/nfs.conf       /etc/pnm2ppa.conf   /etc/rsyslog.conf
+/etc/nfsmount.conf  /etc/radvd.conf
+
+7、只显示/root下的隐藏文件和目录
+
+[root@CentOS7 ~]#`ls -aI "[^.]*"`(在当前目录下)(当前目录为root)
+
+>.   .bash_history  .bash_profile  .cache   .cshrc  .esd_auth      .local
+..  .bash_logout   .bashrc        .config  .dbus   .ICEauthority  .tcshrc
+
+[root@CentOS7 ~]#`ls -d .*`
+
+[root@CentOS7 ~]#`l.`
+
+8、只显示/etc下的非隐藏目录
+
+[root@CentOS7 ~]#`ls -d /etc/*/`
+
+>/etc/0/                  /etc/iproute2/        /etc/rc1.d/
+/etc/0a/                 /etc/ipsec.d/         /etc/rc2.d/
+/etc/abrt/               /etc/iscsi/           /etc/rc3.d/
+/etc/alsa/               /etc/java/            /etc/rc4.d/
+/etc/alternatives/       /etc/jvm/             /etc/rc5.d/
+/etc/audisp/             /etc/jvm-commmon/     /etc/rc6.d/
+/etc/audit/              /etc/kernel/          /etc/rc.d/
+/etc/avahi/              /etc/krb5.conf.d/     /etc/rdma/
+/etc/bash_completion.d/  /etc/ld.so.conf.d/    /etc/request-key.d/
+/etc/binfmt.d/           /etc/libblockdev/     /etc/rpm/
+/etc/bluetooth/          /etc/libibverbs.d/    /etc/rsyslog.d/
+/etc/brltty/             /etc/libnl/           /etc/rwtab.d/
+/etc/chkconfig.d/        /etc/libreport/       /etc/samba/
+/etc/cifs-utils/         /etc/libvirt/         /etc/sane.d/
+/etc/cron.d/             /etc/logrotate.d/     /etc/sasl2/
+/etc/cron.daily/         /etc/lsm/             /etc/scl/
+/etc/cron.hourly/        /etc/lvm/             /etc/security/
+/etc/cron.monthly/       /etc/maven/           /etc/selinux/
+/etc/cron.weekly/        /etc/mcelog/          /etc/setroubleshoot/
+/etc/cups/               /etc/modprobe.d/      /etc/setuptool.d/
+/etc/cupshelpers/        /etc/modules-load.d/  /etc/sgml/
+/etc/dbus-1/             /etc/multipath/       /etc/skel/
+/etc/dconf/              /etc/my.cnf.d/        /etc/smartmontools/
+/etc/default/            /etc/NetworkManager/  /etc/speech-dispatcher/
+/etc/depmod.d/           /etc/ntp/             /etc/ssh/
+/etc/dhcp/               /etc/oddjob/          /etc/ssl/
+/etc/dnsmasq.d/          /etc/oddjobd.conf.d/  /etc/statetab.d/
+/etc/dracut.conf.d/      /etc/openldap/        /etc/sudoers.d/
+/etc/exports.d/          /etc/opt/             /etc/sysconfig/
+/etc/fcoe/               /etc/PackageKit/      /etc/sysctl.d/
+/etc/festival/           /etc/pam.d/           /etc/systemd/
+/etc/firefox/            /etc/pkcs11/          /etc/terminfo/
+/etc/firewalld/          /etc/pki/             /etc/tmpfiles.d/
+/etc/flatpak/            /etc/plymouth/        /etc/tuned/
+/etc/fonts/              /etc/pm/              /etc/udev/
+/etc/gconf/              /etc/polkit-1/        /etc/udisks2/
+/etc/gcrypt/             /etc/popt.d/          /etc/unbound/
+/etc/gdbinit.d/          /etc/postfix/         /etc/UPower/
+/etc/gdm/                /etc/ppp/             /etc/vmware-tools/
+/etc/geoclue/            /etc/prelink.conf.d/  /etc/wpa_supplicant/
+/etc/ghostscript/        /etc/profile.d/       /etc/X11/
+/etc/gnupg/              /etc/pulse/           /etc/xdg/
+/etc/groff/              /etc/purple/          /etc/xinetd.d/
+/etc/grub.d/             /etc/python/          /etc/xml/
+/etc/gss/                /etc/qemu-ga/         /etc/yum/
+/etc/gssproxy/           /etc/qemu-kvm/        /etc/yum.repos.d/
+/etc/hp/                 /etc/ras/
+/etc/init.d/             /etc/rc0.d/
+
+## 7.创建空文件和刷新时间
+touch命令
+
+格式：touch [OPTION]... FILE...
+
+-a 仅改变 atime和ctime
+
+-m  仅改变 mtime和ctime
+
+-t  [[CC]YY]MMDDhhmm[.ss] 指定atime和mtime的时间戳
+
+-c 如果文件不存在，则不予创建
+
+## 8.复制cp
+
+[root@CentOS7 data]#`ll /etc/fstab `
+
+>-rw-r--r--. 1 root root 595 Sep 18 22:38 /etc/fstab
+
+[root@CentOS7 data]#`cp /etc/fstab /data/fstab.bak`
+
+[root@CentOS7 data]#`ll /etc/fstab /data/fstab.bak`
+
+>-rw-r--r--. 1 root root 595 Sep 27 15:06 /data/fstab.bak
+
+>-rw-r--r--. 1 root root 595 Sep 18 22:38 /etc/fstab
+
+-i：覆盖前提醒([root@CentOS7 data]#`alias cp`
+
+>alias cp='cp -i';在root用户下直接复制)
+
+-n:不覆盖，注意俩者顺序
+
+-a: 归档，相当于-dR --preserv=all
+
+-av:显示复制的详细的过程
+
+-d：--no-dereference --preserv=links 不复制原文件，只复制链接名
+--preserv[=ATTR_LIST] 
+
+-p: 等同--preserv=mode,ownership,timestamp
+
+-v: --verbose
+
+-f: --force
+
+-u:--update 只复制源比目标更新文件或目标不存在的文件
+
+-b: 目标存在，覆盖前先备份
+
+--backup=numbered 目标存在，覆盖前先备份加数字后缀
+
+#### 练习
+1、定义别名命令baketc，每天将/etc/目录下所有文件，备份到/app独立的子目录下，并要求子目录格式为 backupYYYY-mm-dd，备份过程可见
+
+[root@CentOS7 data]#`cp -av /etc/ /data/backup`date +%F` `
+
+>.......
+
+[root@CentOS7 data]#alias baketc='cp -av /etc/ /data/backup`date +%F`'
+
+[root@CentOS7 data]#`baketc`
+
+>......
+
+2、创建/app/rootdir目录，并复制/root下所有文件到该目录内，要求保留原有权限 
+
+[root@CentOS7 data]#`cp -rp /root/ /data/rootdir`
+
+## 9.mv：移动和重命名文件
+
+[root@CentOS7 data]#`mv f1 f3`
+
+[root@CentOS7 data]#`ls`
+
+>f2  f3
+
+[root@CentOS7 data]#`mv f3 /root`
+[root@CentOS7 data]#`ls /root/`
+
+>anaconda-ks.cfg  Downloads  initial-setup-ks.cfg  Public     Videos
+Desktop          env.sh     Music                 root
+Documents        f3         Pictures              Templates
+
+[root@CentOS7 data]#`mv /root/f3 /data/f1`
+
+[root@CentOS7 data]#`ls`
+
+>f1  f2
+
+-i: 交互式
+
+-f: 强制
+
+-b: 目标存在，覆盖前先备份
+
+[root@CentOS7 data]#`cp f2 f4`
+
+[root@CentOS7 data]#`ls`
+
+>f1  f2  f4
+
+[root@CentOS7 data]#`mv -b f2 f4`
+
+mv: overwrite ‘f4’? y
+
+[root@CentOS7 data]#`ls`
+
+>f1  f4  f4~
+
+## 10.删除
+rm [OPTION]... FILE...
+
+[root@CentOS7 data]#`rm f1`
+
+>rm: remove regular empty file ‘f1’? y
+
+常用选项：
+
+-i	交互式
+
+-f	强制删除
+
+[root@CentOS7 data]#`rm -f f4`
+
+-r	递归
+
+[root@CentOS7 data]#`rm -rf`
+
+--no-preserve-root  删除/ 
+
+示例
+
+rm -rf	/*(删库)
+
+删除-a文件：
+
+[root@CentOS7 data]#`rm ./-a`
+
+rm: remove regular empty file ‘./-a’? y
+
+[root@CentOS7 data]#
+
+[root@CentOS7 data]#`ls`
+
+清空data目录：
+
+[root@CentOS7 data]#`rm -rf /data/*`
+
+[root@CentOS7 data]#`ls`
+
+## 11.目录操作
+
+tree 显示目录树
+
+-d: 只显示目录
+
+[root@CentOS7 ~]#`tree -d /root`
+
+>/root
+
+├── Desktop
+
+├── Documents
+
+├── Downloads
+
+├── Music
+
+├── Pictures
+
+├── Public
+
+├── Templates
+
+└── Videos
+
+8 directories
+
+
+-L level：指定显示的层级数目
+
+[root@CentOS7 ~]#`tree -L 1 /etc`
+
+>/etc
+
+├── abrt
+
+├── adjtime
+
+├── aliases
+
+├── aliases.db
+
+├── alsa
+
+├── alternatives
+
+├── anacrontab
+
+├── asound.conf
+
+├── at.deny
+
+├── audisp
+
+├── audit
+
+
+-P pattern: 只显示由指定pattern匹配到的路径
+
+[root@CentOS7 ~]#`tree -P /etc/rc*`
+>/etc/rc1.d
+
+/etc/rc2.d
+
+/etc/rc3.d
+
+/etc/rc4.d
+
+/etc/rc5.d
+
+/etc/rc6.d
+
+/etc/rc.d
+
+├── init.d
+├── rc0.d
+├── rc1.d
+├── rc2.d
+├── rc3.d
+├── rc4.d
+├── rc5.d
+└── rc6.d
+
+/etc/rc.local [error opening dir]
+
+8 directories, 0 files
+
+
+mkdir 创建目录
+
+[root@CentOS7 data]#`mkdir dir1`
+
+[root@CentOS7 data]#`ls`
+>dir1
+
+-p: 存在于不报错，且可自动创建所需的各目录
+
+[root@CentOS7 data]#`mkdir dir1/dir2/dir3/dir4`
+
+>mkdir: cannot create directory ‘dir1/dir2/dir3/dir4’: No such file or directory
+
+[root@CentOS7 data]#`mkdir dir1/dir2/dir3/dir4 -p`
+
+[root@CentOS7 data]#`tree`
+
+>.
+
+└── dir1
+
+    └── dir2
+
+        └── dir3
+
+            └── dir4
+
+4 directories, 0 files
+
+-v: 显示详细信息
+
+-m MODE: 创建目录时直接指定权限
+
+rmdir 删除空目录
+
+-p: 递归删除父空目录
+
+-v: 显示详细信息
+
+rm -r 递归删除目录树
+
+### 练习
+(1) 如何创建/testdir/dir1/x, /testdir/dir1/y, /testdir/dir1/x/a, 
+/testdir/dir1/x/b, /testdir/dir1/y/a, /testdir/dir1/y/b
+
+mkdir -p /testdir/dir2/{x,y}/{a,b}
+
+(2) 如何创建/testdir/dir2/x, /testdir/dir2/y, /testdir/dir2/x/a, /testdir/dir2/x/b
+
+mkdir -pv /testdir/dir2/{x/{a,b},y}
+
+(3) 如何创建/testdir/dir3, /testdir/dir4, /testdir/dir5, /testdir/dir5/dir6, /testdir/dir5/dir7
+
+mkdir -p /testdir/dir{3,4,5/dir{6,7}}
+
+## 12.硬链接和软链接
+
+硬链接：对一个文件，起多个名字。
+
+软链接：原始文件一般路径用相对路径，相对路径一定相对于软链接文件的路径
+
+硬链接和软链接的区别
+
+1.硬链接和原来的文件没有什么区别，而且共享一个 inode 号（文件在文件系统上的唯一标识）；而软链接不共享 inode，也可以说是个特殊的 inode，所以和原来的 inode 有区别。
+
+2.若原文件删除了，则该软连接则不可以访问，而硬连接则是可以的。
+
+3.由于符号链接的特性，导致其可以跨越磁盘分区，但硬链接不具备这个特性.
+
+符号（或软）链接
+
+一个符号链接指向另一个文件
+
+ls - l的 显示链接的名称和引用的文件
+
+一个符号链接的内容是它引用文件的名称
+
+可以对目录进行
+
+可以跨分区
+
+指向的是另一个文件的路径；其大小为指向的路径字符串的长度；不增加或减少目标文件inode的引用计数；
+
+语法：
+ln -s  filename  [linkname]
+
+##### 确定文件内容
+
+文件可以包含多种类型的数据
+
+检查文件的类型，然后确定适当的打开命令或应用程序使用
+
+file [options] <filename>...
+
+常用选项:
+
+-b 列出文件辨识结果时，不显示文件名称
+
+-f filelist 列出文件filelist中文件名的文件类型
+
+-F 使用指定分隔符号替换输出文件名后默认的”:”分隔符
+
+-L 查看对应软链接对应文件的文件类型
+
+--help 显示命令在线帮助
+
+## 13.标准输入和输出
+程序：指令+数据
+
+读入数据：Input
+
+输出数据：Output
+
+打开的文件都有一个fd: file descriptor (文件描述符)
+
+Linux给程序提供三种I/O设备
+
+标准输入（STDIN）－0	默认接受来自键盘的输入
+
+标准输出（STDOUT）－1	默认输出到终端窗口
+
+标准错误（STDERR）－2	默认输出到终端窗口
+
+I/O重定向：改变默认位置
+
+把输出和错误重新定向到文件
+
+STDOUT和STDERR可以被重定向到文件命令	操作符号	文件名支持的操作符号包括：
+
+> 把STDOUT重定向到文件 
+
+2> 把STDERR重定向到文件
+
+&>	把所有输出重定向到文件
+
+> 文件内容会被覆盖
+
+whoami >who.log
+
+set –C  禁止将内容覆盖已有文件,但可追加
+
+>| file 强制覆盖 set +C  允许覆盖
+
+>>  原有内容基础上，追加内容
+
+whoami >>who.log
+
+把输出和错误重新定向到文件
+
+2>	覆盖重定向错误输出数据流
+
+2>> 追加重定向错误输出数据流
+
+标准输出和错误输出各自定向至不同位置
+
+COMMAND > /path/to/file.out 2> /path/to/error.out
+
+合并标准输出和错误输出为同一个数据流进行重定向
+
+&> 覆盖重定向
+
+&>>  追加重定向
+
+COMMAND > /path/to/file.out 2>&1 （顺序很重要）
+
+COMMAND >> /path/to/file.out 2>&1
+
+()：合并多个程序的STDOUT
+
+( cal 2007 ; cal 2008 ) > all.txt
+
+tr命令
+
+tr 转换和删除字符
+
+tr [OPTION]... SET1 [SET2]
+
+[root@CentOS7 data]#`tr 'a-z' 'A-Z'`
+>aavvavava
+
+AAVVAVAVA
+
+^C
+
+
+选项：
+
+-c	–C --complement：取字符集的补集
+
+-d	--delete：删除所有属于第一字符集的字符
+
+-t	--truncate-set1：将第一个字符集对应字符转化为第二字符集对应的字符
+
+[:alnum:]：字母和数字 [:alpha:]：字母 [:cntrl:]：控制（非打印）字符
+[:digit:]：数字 [:graph:]：图形字符 [:lower:]：小写字母 [:print:]：可打印字符
+[:punct:]：标点符号 [:space:]：空白字符 [:upper:]：大写字母
+[:xdigit:]：十六进制字符
+
