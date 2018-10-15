@@ -1,0 +1,1023 @@
+# SHELL脚本编程基础
+## 编程
+### 1.编程基础
+程序
+
+程序：算法+数据结构
+
+数据：是程序的核心
+
+数据结构：数据在计算机中的类型和组织方式
+
+算法：处理数据的方式
+
+程序编程风格：过程式：以指令为中心，数据服务于指令
+
+对象式：以数据为中心，指令服务于数据
+
+shell程序：提供了编程能力，解释执行
+
+### 2.程序的执行方式
+计算机：运行二进制指令
+
+编程语言：人与计算机之间交互的语言
+
+低级编程语言：机器：二进制的0和1的序列，称为机器指令。与自然语言差异太大，难懂、难写
+
+汇编：用一些助记符号替代机器指令，称为汇编语言如：ADD A,B 将寄存器A的数与寄存器B的数相加得到的数放到寄存器A中汇编语言写好的程序需要汇编程序转换成机器指令
+
+汇编语言稍微好理解，即机器指令对应的助记符，助记符更接近自然语言
+
+高级编程语言：
+
+编译：高级语言-->编译器-->机器代码-->执行
+
+C，C++
+
+解释：高级语言-->执行-->解释器-->机器代码
+
+shell，python，php，JavaScript，per
+
+### 3.编程基本概念
+
+编程逻辑处理方式：顺序执行循环执行选择执行
+
+shell编程：过程式、解释执行
+
+编程语言的基本结构：各种系统命令的组合数据存储：变量、数组表达式: a + b 语句:if 
+
+## shell脚本基础
+
+### 1.shell脚本基础
+shell脚本:
+
+包含一些命令或声明，并符合一定格式的文本文件
+
+格式要求：首行shebang机制
+
+#!/bin/bash
+
+#!/usr/bin/python
+
+#!/usr/bin/perl
+
+shell脚本的用途有：
+
+自动化常用命令
+
+执行系统管理和故障排除
+
+创建简单的应用程序
+
+处理文本或文件
+
+### 2.创建shell脚本
+
+第一步：使用文本编辑器来创建文本文件
+
+第一行必须包括shell声明序列：#!
+
+#!/bin/bash
+添加注释
+
+注释以#开头
+
+第二步：运行脚本
+
+给予执行权限，在命令行上指定脚本的绝对或相对路径
+
+执行权限 chmod +x hello.sh
+
+直接运行解释器，将脚本作为解释器程序的参数运行
+
+脚本规范
+
+脚本代码开头约定
+
+1、	第一行一般为调用使用的语言
+
+2、	程序名，避免更改文件名为无法找到正确的文件
+
+3、	版本号
+
+4、	更改后的时间
+
+5、	作者相关信息
+
+6、	该程序的作用，及注意事项
+
+7、	最后是各版本的更新简要说明
+
+脚本的基本结构
+
+脚本的基本结构
+
+#!SHEBANG
+CONFIGURATION_VARIABLES
+FUNCTION_DEFINITIONS MAIN_CODE 
+shell脚本示例
+#!/bin/bash
+
+#-----------------------------------------# Filename:    hello.sh
+
+#Revision:    1.1
+
+#Date:        2017/06/01
+
+#Author:      wang
+
+#Email:       wang@gmail.com
+
+#Website:     www.magedu.com
+
+#Description: This is the first script
+
+#-----------------------------------------# Copyright:   2017 wang
+
+#License:     GPL echo “hello world”
+
+脚本调试
+
+检测脚本中的语法错误
+
+bash -n /path/to/some_script
+
+调试执行
+
+bash -x /path/to/some_script
+
+### 3.变量
+变量：命名的内存空间
+
+数据存储方式：字符：
+
+数值：整型，浮点型
+
+变量：变量类型作用：
+
+1、	数据存储格式
+
+2、	参与的运算
+
+3、	表示的数据范围类型：字符数值：整型、浮点型
+
+### 4.变量
+
+强类型：变量不经过强制转换，它永远是这个数据类型，不允许隐式的类型转换。一般定义变量时必须指定类型、参与运算必须符合类型要求；调用未声明变量会产生错误如：java ， c# ，python
+
+如：print(‘magedu’+ 10) 	提示出错，不会自动转换类型
+print(‘magedu’+str(10))    结果为magedu10，需要显示转换类型
+
+弱类型：语言的运行时会隐式做数据类型转换。无须指定类型，默认均为字符型；参与运算会自动进行隐式类型转换；变量无须事先定义可直接调用如：
+
+bash 不支持浮点数，php，javascript
+
+### 5.变量命名法则：
+
+1、	不能使程序中的保留字：例如if, for
+
+2、	只能使用数字、字母及下划线，且不能以数字开头
+
+3、	见名知义
+
+4、	统一命名规则：驼峰命名法
+
+### 6.bash中变量的种类
+根据变量的生效范围等标准划分下面变量类型：
+
+局部变量：生效范围为当前shell进程；对当前shell之外的其它shell进程，包括当前shell的子shell进程均无效
+
+环境（全局）变量：生效范围为当前shell进程及其子进程本地变量：生效范围为当前shell进程中某代码片断，通常指函数
+
+位置变量：$1, $2, ...来表示，用于让脚本在脚本代码中调用通过命令行传递给它的参数
+
+特殊变量：$?, $0, $*, $@, $#,$$
+
+
+
+练习
+
+
+
+
+    echo OS version is `cat /etc/centos-release`
+
+    echo kernel version is `uname -r`
+
+    echo The cpu type is `lscpu|grep "Model name"|cut -d: -f2`
+
+    echo The memory is `free -h|grep Mem|tr -s " " % |cut -d% -f2`
+
+    echo The max disk used is `df |grep /dev/sd|tr -s " " ":" |cut -d: -f5|sor
+    t -nr|head -1`
+
+    echo The hostname is `hostname`
+
+    echo The ipaddr is `ifconfig ens33 |grep -o "\([0-9]\{1,3\}\.\)\{3\}[0-9]\
+    {1,3\}" |head -1`     
+
+                                                                        
+    ~                                                                         
+    "sysinfo_16.sh" 18L, 759C written     
+
+    [root@CentOS7 data]#bash sysinfo_16.sh
+
+    OS version is CentOS Linux release 7.5.1804 (Core)
+
+    kernel version is 3.10.0-862.el7.x86_64
+
+    The cpu type is Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GH
+    z
+    The memory is 1.1G
+
+    The max disk used is 16%
+
+    The hostname is CentOS7.localdomain
+
+    The ipaddr is 172.16.254.139
+          
+### 7.局部变量
+变量赋值：name=‘value’ 可以使用引用value:
+
+(1)	可以是直接字串; name=“root"
+
+(2)	变量引用：name="$USER"
+
+(3)	命令引用：name=`COMMAND`  name=$(COMMAND) 变量引用：${name}   $name
+
+""：弱引用，其中的变量引用会被替换为变量值
+
+''：强引用，其中的变量引用不会被替换为变量值，而保持原字符串
+
+显示已定义的所有变量：set
+
+删除变量：unset name
+### 8.环境变量
+变量声明、赋值：
+
+export name=VALUE
+
+declare -x name=VALUE
+
+变量引用：$name, ${name}
+
+显示所有环境变量： env printenv export declare -x
+
+删除变量：
+
+unset name
+
+练习（小括号开启一个子进程    
+
+花括号不开启子进程）
+
+
+    name=m34;(echo $name;name=net34;echo $name );echo $name
+    name=m34;{ echo $name;name=net34;echo $name; };echo $name
+
+环境变量
+
+bash内建的环境变量：
+
+PATH
+
+SHELL当前shell
+
+USER当前用户名
+
+UID当前id
+
+HOME当前家目录
+
+PWD当前工作目录
+
+SHLVL当前bash shell 在第几层
+
+LANG当前语言
+
+MAIL当前用户邮箱路径
+
+HOSTNAME当前主机名
+
+HISTSIZE历史的长度
+
+——上一条命令的最后一个参数 
+
+    [root@CentOS7 bin]#su lpc
+    [lpc@CentOS7 bin]$exit
+    exit
+    [root@CentOS7 bin]#echo $_
+    lpc
+
+### 9.只读和位置变量
+
+只读变量：只能声明，但不能修改和删除
+
+声明只读变量：
+
+readonly name
+
+declare -r name
+
+    [root@CentOS7 bin]#pi=3.14
+    [root@CentOS7 bin]#pi=3.1415
+    [root@CentOS7 bin]#readonly pi=3.1415
+    [root@CentOS7 bin]#pi=didi
+    -bash: pi: readonly variable
+
+查看只读变量： readonly –p 
+
+    [root@CentOS7 bin]#readonly -p
+    declare -ir UID="0"
+    declare -r pi="3.1415"
+
+位置变量：在脚本代码中调用通过命令行传递给脚本的参数
+
+$1, $2, ...：对应第1、第2等参数，shift [n]换位置
+
+$10以上需要加花括号${10}
+
+    echo "1st arg is $1"
+    echo "15st arg is${15}" 
+
+    [root@CentOS7 bin]#test_arg.sh {a..z}
+    1st arg is a
+    15st arg iso
+
+$0: 命令本身
+
+$*: 传递给脚本的所有参数，全部参数合为一个字符串
+
+$@: 传递给脚本的所有参数，每个参数为独立字符串
+
+$#: 传递给脚本的参数的个数
+
+$@ $* 只在被双引号包起来的时候才会有差异 
+
+    echo "1st arg is $*"                                                      
+    test_arg1.sh "$*"
+
+    [root@CentOS7 bin]#test_arg.sh a b c
+    1st arg is a b c
+    all arg is a b c
+
+
+
+    echo "1st arg is $*"
+    test_arg1.sh "$@"
+
+    [root@CentOS7 bin]#test_arg.sh a b c
+    1st arg is a b c
+    all arg is a
+
+
+set -- 清空所有位置变量(在自己以后的都不显示)
+
+
+
+显示IP地址（定义）
+
+    echo "ip=`ifconfig $1 |grep inet|grep -o "\([0-9]\{1,3\}\.\)\{3\}[0-9]\{1,3\}"|head -1`"
+    [root@CentOS7 bak]#ip_16.sh
+    bash: ip_16.sh: command not found...
+    [root@CentOS7 bak]#
+    [root@CentOS7 bak]#
+    [root@CentOS7 bak]#
+    [root@CentOS7 bak]#bash ip_16.sh
+    ip=172.18.132.235
+    [root@CentOS7 bak]#bash ip_16.sh lo
+    ip=127.0.0.1
+
+使用脚本创建vim并打开：
+
+    cat > $1 <<EOF
+    #!/bin/bash
+    #
+    #********************************************************************
+    #Author:                lipeichang
+    #QQ:                    1872243030
+    #Date:                  2018-10-11
+    #FileName：             createscript_16.sh
+    #URL:                   1872243030@qq.com
+    #Description：          The test script
+    #Copyright (C):         2018 All rights reserved
+    #********************************************************************
+    
+    EOF
+    chmod +x $1
+    vim + $1   
+### 10.退出状态
+
+进程使用退出状态来报告成功或失败
+
+0  代表成功，1－255代表失败
+
+    [root@CentOS7 bak]#echo $?
+    0
+    [root@CentOS7 bak]#echo $?
+    127
+
+$? 变量保存最近的命令退出状态
+
+例如：
+
+ping -c1 -W1 hostdown &> /dev/null echo $?
+
+退出状态码
+
+    ### 11.bash自定义退出状态码
+    exit [n]：自定义退出状态码
+
+    #********************************************************************
+    hostname
+    exit 10                                                            
+    ls
+
+    [root@CentOS7 bak]#./f2.sh  
+    CentOS7.localdomain
+    [root@CentOS7 bak]#echo $?
+    10
+
+注意：脚本中一旦遇到exit命令，脚本会立即终止；终止退出状态取决于exit命令后面的数字
+
+注意：如果未给脚本指定退出状态码，整个脚本的退出状态码取决于脚本中执行的最后一条命令的状态码
+### 12.算术运算
+
+bash中的算术运算:help let +, -, *, /, %取模（取余）, **（乘方）
+    [root@CentOS7 bak]#let n=2**3
+    [root@CentOS7 bak]#echo $n
+    8
+
+    [root@CentOS7 bak]#let n=5%2
+    [root@CentOS7 bak]#echo $n
+    1
+
+    [root@CentOS7 bak]#expr 4 + 3
+    7
+    [root@CentOS7 bak]#expr 4 \* 3
+    12
+实现算术运算：
+
+(1)	let var=算术表达式
+
+(2)	var=$[算术表达式]
+
+(3)	var=$((算术表达式))
+
+(4)	var=$(expr arg1 arg2 arg3 ...)
+
+(5)	declare –i var = 数值
+
+    [root@CentOS7 bak]#declare -i n=4*6
+    [root@CentOS7 bak]#echo $n
+    24
+
+(6)	echo ‘算术表达式’ | bc
+
+    [root@CentOS7 bak]#echo 4*6 |bc
+    24
+
+乘法符号有些场景中需要转义，如*
+
+bash有内建的随机数生成器：$RANDOM（0-32767） echo $[$RANDOM%50] ：0-49之间随机数
+
+### 13.赋值
+增强型赋值：
+
++=, -=, *=, /=, %=
+
+
+let varOPERvalue 例如:let count+=3 自加3后自赋值
+
+自增，自减：
+
+let var+=1 
+
+let var++ 
+
+let var-=1 
+
+let var--
+
+    [root@CentOS7 bak]#i=0
+    [root@CentOS7 bak]#let i++
+    [root@CentOS7 bak]#echo $i
+    1
+    [root@CentOS7 bak]#let i++
+    [root@CentOS7 bak]#echo $i
+    2
+    [root@CentOS7 bak]#let i++
+    [root@CentOS7 bak]#echo $i
+    3
+    [root@CentOS7 bak]#let ++i
+    [root@CentOS7 bak]#echo $i
+    4
+
+
+    i++
+    [root@CentOS7 bak]#i=10;let j=i++;echo  j=$j
+    j=10
+    [root@CentOS7 bak]#echo $i
+    11
+    [root@CentOS7 bak]#i=10;let j=++i;echo  j=$j   
+    j=11
+    [root@CentOS7 bak]#echo $i
+    11
+
+--i
+
+    [root@CentOS7 bak]#i=10;let j=--i;echo  j=$j  
+    j=9
+    [root@CentOS7 bak]#echo $i
+    9
+    [root@CentOS7 bak]#i=10;let j=i--;echo  j=$j  
+    j=10
+
+
+随机颜色
+    Color="\e[1;5;$[RANDOM%7+31]m"
+    END="\e[0m"
+    echo -e "$Color nihao $END"   
+
+### 14.逻辑运算
+true（真）, false（假）
+
+1, 0
+
+与&：
+
+1 与 1 = 1
+
+1 与 0 = 0
+
+0 与 1 = 0
+
+0	与 0 = 0
+
+    [root@CentOS7 bak]#echo $[12&24]
+    8
+
+或|:
+1	或 1 = 1
+
+ 1 或 0 = 1
+
+0 或 1 = 1
+
+0 或 0 = 0
+
+    [root@CentOS7 bak]#echo $[12|24]
+    28
+
+逻辑运算
+
+非：！
+
+! 1 = 0   	! true
+
+! 0 = 1  	! false
+
+    
+    [root@CentOS7 bak]#echo $[!12]
+    0
+    [root@CentOS7 bak]#echo $[!1]
+    0
+    [root@CentOS7 bak]#echo $[!0]
+    1
+
+短路运算短路与第一个为0，结果必定为0
+
+
+第一个为1，第二个必须要参与运算短路或第一个为1，结果必定为1
+
+第一个为0，第二个必须要参与运算
+
+cmd1 与 cmd2 
+cmd1为真 与 cmd2  结果？
+cmd1为假 与 cmd2  结果假
+
+cmd1 或 cmd2 
+cmd1为真 或 cmd2  结果真
+cmd1为假 或 cmd2  结果？
+
+cmd1 短路与&& cmd2 
+如果cmd1为真，则执行cmd2
+如果cmd1为假，则不执行cmd2
+
+cmd1 短路或|| cmd2 
+如果cmd1为真，则不执行cmd2
+如果cmd1为假，则执行cmd2
+
+
+cmd2 cmd3 真
+cmd1 && cmd2 || cmd3 
+如果cmd1为真，cmd2执行，cmd3不执行
+如果cmd1为假，cmd2不执行，cmd3执行
+
+cmd2 cmd3 真
+cmd1 || cmd2 && cmd3 
+如果cmd1为真，cmd2不执行，cmd3执行
+如果cmd1为假，cmd2执行，cmd3执行
+
+异或
+：^ 异或的两个值,相同为假，不同为真
+
+异或：相同为0 不同为1 0 ^ 0 1^1 0 ^ 1 1
+
+同或：相同为1 不同为0
+
+A=10;B=20;tmp=$A;A=$B;B=$tmp;echo A=$A B=$B
+A=10;B=20;A=$[A^B];B=$[A^B];A=$[A^B];echo A=$A B=$B
+
+条件测试
+
+判断某需求是否满足，需要由测试机制来实现
+
+专用的测试表达式需要由测试命令辅助完成测试过程
+
+评估布尔声明，以便用在条件性执行中
+
+•	若真，则返回0
+
+•	若假，则返回1
+
+
+### 15.test命令
+
+测试命令：
+
+test EXPRESSION 
+
+    [root@CentOS7 bak]#st1=123
+    [root@CentOS7 bak]#st2=456
+    [root@CentOS7 bak]#test "$st1" = "$st2"
+    [root@CentOS7 bak]#echo $?
+    1
+    [root@CentOS7 bak]#st2=123
+    [root@CentOS7 bak]#echo $?
+    0
+
+[ EXPRESSION ] 
+
+    st1=123
+    st2=123
+
+    [root@CentOS7 bak]#[ "$st1"  != "$st2" ]    
+    [root@CentOS7 bak]#echo $?
+    1
+    [root@CentOS7 bak]#st2=456
+    [root@CentOS7 bak]#[ "$st1" != "$st2" ]
+    [root@CentOS7 bak]#echo $?             
+    0
+
+[[ EXPRESSION ]]
+
+注意：EXPRESSION前后必须有空白字符
+
+条件性的执行操作符
+
+根据退出状态而定，命令可以有条件地运行
+
+•	&& 代表条件性的AND  THEN
+
+•	||  代表条件性的OR  ELSE
+
+例如：
+grep -q no_such_user /etc/passwd \
+|| echo 'No such user' No such user ping -c1 -W2 station1 &> /dev/null \
+	>	&& echo "station1 is up"	\
+>	|| (echo 'station1 is unreachable'; exit 1) station1 is up
+
+长格式的例子：
+
+test  "$A" = "$B" && echo "Strings are equal" 
+
+test “$A”-eq “$B” && echo "Integers are equal"
+
+简写格式的例子：
+
+[ "$A" = "$B" ] && echo "Strings are equal" 
+
+[ "$A" -eq "$B" ] && echo "Integers are equal"
+
+### 16.bash的数值测试
+-v VAR   
+
+变量VAR是否设置
+
+数值测试：
+
+-gt	是否大于
+
+    [root@CentOS7 bak]#[ 10 -gt 6 ]
+    [root@CentOS7 bak]#echo $?
+    0
+
+-ge	是否大于等于
+
+-eq	是否等于
+
+    [root@CentOS7 bak]#[ 10 -eq 6 ]  
+    [root@CentOS7 bak]#echo $?     
+    1
+
+-ne	是否不等于
+
+-lt	是否小于
+
+    [root@CentOS7 bak]#[ 10 -lt 6 ]  
+    [root@CentOS7 bak]#echo $?     
+    1
+
+-le	是否小于等于
+
+    warning=20                                                                
+    disk=`df |grep "/boot$"| tr -s ' ' '%'|cut -d '%' -f5`
+    [ $disk -ge $warning ] && wall disk will be full
+    [root@CentOS7 bak]#bash diskcheck_16.sh
+
+
+    sleep=2                                                                                                                                        
+        [ $# -eq 0 ] && echo "pls input a ip" && exit 8
+        ping -c 1 -w 1 $1 &> /dev/null && echo"$1 is up" ||echo "$1 is down"
+
+bash的字符串测试
+
+### 17.字符串测试：
+
+=	是否等于
+
+>	ascii码是否大于ascii码
+
+<	是否小于
+
+!=	是否不等于
+
+=~	左侧字符串是否能够被右侧的PATTERN所匹配
+
+注意: 此表达式一般用于[[  ]]中；扩展的正则表达式
+
+	-z "STRING“	字符串是否为空，空为真，不空为假
+
+	-n "STRING“	字符串是否不空，不空为真，空为假
+
+注意：用于字符串比较时的用到的操作数都应该使用引号
+
+Bash的文件测试
+
+### 18存在性测试
+
+-a FILE：同-e
+
+-e FILE: 文件存在性测试，存在为真，否则为假
+
+存在性及类别测试
+
+-b	FILE：是否存在且为块设备文件
+
+-c	FILE：是否存在且为字符设备文件
+
+-d	FILE：是否存在且为目录文件
+
+-f FILE：是否存在且为普通文件
+
+-h FILE 或 -L FILE：存在且为符号链接文件
+
+-p FILE：是否存在且为命名管道文件
+
+-S FILE：是否存在且为套接字文件
+
+Bash的文件权限测试
+
+### 19文件权限测试：
+
+-r FILE：是否存在且可读
+
+-w	FILE: 是否存在且可写
+
+-x	FILE: 是否存在且可执行
+
+文件特殊权限测试：
+
+-u FILE：是否存在且拥有suid权限 -g FILE：是否存在且拥有sgid权限
+
+-k FILE：是否存在且拥有sticky权限
+
+Bash的文件属性测试
+
+文件大小测试：
+
+-s	FILE: 是否存在且非空
+
+文件是否打开：
+
+-t	fd: fd 文件描述符是否在某终端已经打开
+
+-N	FILE：文件自从上一次被读取之后是否被修改过
+
+-O	FILE：当前有效用户是否为文件属主
+
+-G FILE：当前有效用户是否为文件属组
+
+Bash的文件属性测试
+
+双目测试：
+
+FILE1 -ef FILE2: FILE1是否是FILE2的硬链接
+
+FILE1 -nt FILE2: FILE1是否新于FILE2（mtime）
+
+FILE1 -ot FILE2: FILE1是否旧于FILE2 
+
+Bash的组合测试条件
+
+第一种方式：
+
+COMMAND1 && COMMAND2 并且
+
+COMMAND1 || COMMAND2 或者
+
+! COMMAND   非
+
+如：[ -f “$FILE” ] && [[  “$FILE”=~ .*\.sh$  ]]
+
+第二种方式：
+
+EXPRESSION1 -a EXPRESSION2 并且
+
+EXPRESSION1 -o EXPRESSION2 或者
+
+! EXPRESSION
+
+必须使用测试命令进行，[[ ]] 不支持
+
+示例：
+[ -z “$HOSTNAME” -o   $HOSTNAME "=="localhost.localdomain" ]  \
+&& hostname www.magedu.com
+[ -f /bin/cat -a -x /bin/cat ] && cat /etc/fstab
+
+使用read命令来接受输入
+
+使用read来把输入值分配给一个或多个shell变量
+
+-p	指定要显示的提示
+
+-s   静默输入，一般用于密码
+
+-n  N 指定输入的字符长度N
+
+-d ‘字符’  输入结束符
+
+-t  N  TIMEOUT为N秒
+
+read	从标准输入中读取值，给每个单词分配一个
+
+### 19.变量
+所有剩余单词都被分配给最后一个变量 read -p “Enter a filename: “ FILE
+
+bash如何展开命令行
+
+把命令行分成单个命令词
+
+展开别名
+
+展开大括号的声明（{}）
+
+展开波浪符声明（~）
+
+命令替换$()	和	``）
+
+再次把命令行分成命令词
+
+展开文件通配（*、?、[abc]等等）
+
+准备I/0重导向（<、>）
+
+运行命令
+
+防止扩展
+
+反斜线（\）会使随后的字符按原意解释
+
+$ echo Your cost: \$5.00 
+
+Your cost: $5.00
+
+加引号来防止扩展
+
+•	单引号（’）防止所有扩展
+
+•	双引号（”）也防止所有扩展，但是以下情况例外：
+
+$（美元符号）	－	变量扩展
+
+`（反引号）	－	命令替换
+
+\（反斜线）	－	禁止单个字符扩展
+
+!（叹号）	－	历史命令替换
+
+bash的配置文件
+
+按生效范围划分，存在两类：
+
+全局配置：
+
+/etc/profile
+
+/etc/profile.d/*.sh
+
+/etc/bashrc
+
+个人配置：
+
+~/.bash_profile
+
+~/.bashrc
+
+shell登录两种方式
+
+交互式登录：
+
+(1)直接通过终端输入账号密码登录
+
+(2)使用“su - UserName” 切换的用户
+
+执行顺序：/etc/profile --> /etc/profile.d/*.sh --> ~/.bash_profile --> 
+~/.bashrc --> /etc/bashrc
+
+非交互式登录：
+
+(1)su UserName
+
+(2)图形界面下打开的终端
+
+(3)执行脚本
+
+(4)任何其它的bash实例
+
+执行顺序： /etc/profile.d/*.sh --> /etc/bashrc -->~/.bashrc
+
+Profile类
+
+按功能划分，存在两类： profile类和bashrc类
+
+profile类：为交互式登录的shell提供配置
+
+全局：/etc/profile, /etc/profile.d/*.sh
+
+个人：~/.bash_profile
+
+功用：
+
+(1)	用于定义环境变量
+
+(2)	运行命令或脚本
+
+Bashrc类
+
+bashrc类：为非交互式和交互式登录的shell提供配置全局：/etc/bashrc
+
+个人：~/.bashrc 
+
+功用：
+
+(1)	定义命令别名和函数
+
+(2)	定义本地变量
+
+编辑配置文件生效
+
+修改profile和bashrc文件后需生效两种方法: 
+
+1重新启动shell进程
+
+2 . 或source 
+例:
+. ~/.bashrc
+
+Bash 退出任务
+
+保存在~/.bash_logout文件中（用户）
+
+在退出登录shell时运行
+
+用于
+
+•	创建自动备份
+
+•	清除临时文件 
+
+$-变量
+
+h：hashall，打开这个选项后，Shell 会将命令所在的路径hash下来，避免每次都要查询。通过set +h将h选项关闭
+
+i：interactive-comments，包含这个选项说明当前的 shell 是一个交互式的 shell。所谓的交互式shell,在脚本中，i选项是关闭的。
+
+m：monitor，打开监控模式，就可以通过Job control来控制进程的停止、继续，后台或者前台执行等。
+
+B：braceexpand，大括号扩展
+
+H：history，H选项打开，可以展开历史列表中的命令，可以通过!感叹号来完成，例如“!!”返回上最近的一个历史命令，“!n”返回第 n 个历史命令
+
+
